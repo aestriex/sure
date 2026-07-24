@@ -635,6 +635,8 @@ Rails.application.routes.draw do
         end
       end
 
+      resources :integration_events, only: [:create]
+
       get "users/reset/status", to: "users#reset_status"
       delete "users/reset", to: "users#reset"
       delete "users/me", to: "users#destroy"
