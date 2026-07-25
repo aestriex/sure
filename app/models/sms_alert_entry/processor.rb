@@ -6,7 +6,7 @@ class SmsAlertEntry::Processor
   private
 
     def source_name
-      "sms"
+      "instant_alert"
     end
 
     def external_id
