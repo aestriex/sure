@@ -1,3 +1,5 @@
+require 'digest/md5'
+
 module IntegrationProcessable
   extend ActiveSupport::Concern
 
@@ -15,6 +17,7 @@ module IntegrationProcessable
         date: date,
         name: name,
         source: source_name,
+        merchant: merchant,
         notes: notes,
         extra: extra_metadata
       )
@@ -31,6 +34,17 @@ module IntegrationProcessable
 
     def currency
       account.currency
+    end
+
+    def merchant
+      merchant_name = payload[:merchant]&.strip
+      return nil unless merchant_name.present?
+
+      import_adapter.find_or_create_merchant(
+        provider_merchant_id: "instant_alert_#{Digest::MD5.hexdigest(merchant_name.downcase)}",
+        name: merchant_name,
+        source: source_name
+      )
     end
 
     def notes
